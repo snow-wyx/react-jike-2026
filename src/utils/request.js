@@ -1,5 +1,6 @@
 //axios的封装处理
 import axios from "axios";
+import { getToken } from "./token";
 //1、根域名配置(后端服务器的“统一入口地址”,前端所有接口，都是在这个地址后面再拼路径)
 //2、超时时间
 
@@ -11,6 +12,10 @@ const request = axios.create({
 //3、请求拦截器/响应拦截器
 // 添加请求拦截器
 request.interceptors.request.use((config) => {
+  const token = getToken()
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
   return config
 }, (error) => {
   return Promise.reject(error)
