@@ -12,10 +12,23 @@ import {
 import { PlusOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import './index.scss'
+import ReactQuill from 'react-quill-new'
+import 'react-quill-new/dist/quill.snow.css'
+import { useEffect, useState } from 'react'
+import { getChanneAPI } from '@/apis/article'
 
 const { Option } = Select
 
 const Publish = () => {
+  //获取频道列表
+  const [channelList, setChannelList] = useState([])
+  useEffect(() => {
+    const getChannelList = async () => {
+      const res = await getChanneAPI()
+      setChannelList(res.data.channels)
+    }
+    getChannelList()
+  }, [])
   return (
     <div className="publish">
       <Card
@@ -45,14 +58,21 @@ const Publish = () => {
             rules={[{ required: true, message: '请选择文章频道' }]}
           >
             <Select placeholder="请选择文章频道" style={{ width: 400 }}>
-              <Option value={0}>推荐</Option>
+              {/*value属性用户选中之后会自动收集起来作为接口的提交字段 */}
+              {channelList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
           </Form.Item>
           <Form.Item
             label="内容"
             name="content"
             rules={[{ required: true, message: '请输入文章内容' }]}
-          ></Form.Item>
+          >
+            <ReactQuill
+              className="publish-quill"
+              theme="snow"
+              placeholder="请输入文章内容"
+            />
+          </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 4 }}>
             <Space>
