@@ -6,4 +6,13 @@ export function getChanneAPI(formData) {
     method: 'GET'
   })
 }
+//提交文章表单
+export function createArticleAPI(data) {
+  return request({
+    url: '/mp/articles?draft=false',
+    method: 'POST',
+    data
+  })
+
+}
 
