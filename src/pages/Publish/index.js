@@ -7,7 +7,8 @@ import {
   Input,
   Upload,
   Space,
-  Select
+  Select,
+  message
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
@@ -31,14 +32,16 @@ const Publish = () => {
     getChannelList()
   }, [])
   const onFinish = (formValue) => {
+    //校验封面类型imageType是否和实际的图片列表imageList数量是相等的
+    if(imageList.length !== imageType) return message.warning("封面类型和图片数量不匹配")
     const { title, content, channel_id } = formValue
     //按照接口文档的格式处理收集到的表单数据
     const reqData = {
       title: title,
       content: content,
       cover: {
-        type: 0,
-        image: []
+        type: imageType,
+        image: imageList.map(item => item.response.data.url)
       },
       channel_id: channel_id
     }
