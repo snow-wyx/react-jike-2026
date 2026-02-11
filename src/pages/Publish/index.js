@@ -18,19 +18,13 @@ import 'react-quill-new/dist/quill.snow.css'
 import { useEffect, useState } from 'react'
 import { getChanneAPI, createArticleAPI } from '@/apis/article'
 import { type } from '@testing-library/user-event/dist/type'
+import { useChannel } from '@/hooks/useChannel'
 
 const { Option } = Select
 
 const Publish = () => {
   //获取频道列表
-  const [channelList, setChannelList] = useState([])
-  useEffect(() => {
-    const getChannelList = async () => {
-      const res = await getChanneAPI()
-      setChannelList(res.data.channels)
-    }
-    getChannelList()
-  }, [])
+  const {channelList} = useChannel()
   const onFinish = (formValue) => {
     //校验封面类型imageType是否和实际的图片列表imageList数量是相等的
     if(imageList.length !== imageType) return message.warning("封面类型和图片数量不匹配")
