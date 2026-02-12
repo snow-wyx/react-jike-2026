@@ -13,6 +13,12 @@ export function createArticleAPI(data) {
     method: 'POST',
     data
   })
-
 }
-
+//渲染文章列表
+export function getArticleListAPI(params) {
+  return request({
+    url: '/mp/articles',
+    method: 'GET',
+    params
+  })
+}
