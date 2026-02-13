@@ -88,7 +88,7 @@ const Article = () => {
     begin_pubdate: '',
     end_pubdate: '',
     page: 1,
-    per_page: 4
+    per_page: 5
   }) 
 
   //获取文章列表
@@ -116,7 +116,14 @@ const Article = () => {
     end_pubdate: formValue.date[1].format('YYYY-MM-DD')
   })
   //4、重新拉取文章列表
-
+  }
+  //分页
+  const onPageChange = (page) => {
+  //修改参数依赖项引发数据的重新获取列表渲染
+  setReqDate({
+    ...reqDate,
+    page: page
+  })
 
   }
 
@@ -164,8 +171,12 @@ const Article = () => {
         </Form>
       </Card>
       {/*表格区域*/}
-      <Card title={`根据筛选条件共查询到 ${list.length} 条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={list} />
+      <Card title={`根据筛选条件共查询到 ${count} 条结果：`}>
+        <Table rowKey="id" columns={columns} dataSource={list} pagination = {{
+          total:count,
+          pageSize: reqDate.per_page,
+          onChange: onPageChange
+        }}   />
       </Card>
     </div>
   )
