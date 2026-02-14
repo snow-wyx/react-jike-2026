@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select, Popconfirm} from 'antd'
 //引入汉化包，时间选择器显示中文
 import locale from 'antd/es/date-picker/locale/zh_CN'
@@ -13,6 +13,7 @@ import { delArticleAPI } from '@/apis/article'
 const { Option } = Select
 const { RangePicker } = DatePicker
 const Article = () => {
+  const navigate = useNavigate()
   const {channelList} = useChannel()
   const columns = [
     {
@@ -54,7 +55,7 @@ const Article = () => {
       render: data => {
         return (
           <Space size="middle">
-            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Button type="primary" shape="circle" icon={<EditOutlined />} onClick={() => navigate(`/publish?id=${data.id}`)} />
             <Popconfirm
             title="Delete the task"
             description="Are you sure to delete this task?"
