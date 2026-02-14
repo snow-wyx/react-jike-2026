@@ -11,12 +11,12 @@ import {
   message
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import './index.scss'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import { useEffect, useState } from 'react'
-import { getChanneAPI, createArticleAPI } from '@/apis/article'
+import { getChanneAPI, createArticleAPI, getArticlebyId } from '@/apis/article'
 import { type } from '@testing-library/user-event/dist/type'
 import { useChannel } from '@/hooks/useChannel'
 
@@ -52,6 +52,29 @@ const Publish = () => {
   const onTypeChange = (e) => {
     setImageType(e.target.value)
   }
+  //回填数据
+  //id数据在路由参数上
+  const [searchParams] = useSearchParams()
+  const articleId = searchParams.get('id')
+  //调用Form组件实例方法回显数据
+  const [form] = Form.useForm()
+  useEffect(() => {
+    //1、通过id获取数据
+    //2、调用实例方法，完成数据回填
+    async function getArticleDetail() {
+    const res = await getArticlebyId(articleId)
+    form.setFieldsValue({
+      ...res.data,
+      //显示图片列表
+      type: res.data.cover.type
+    })
+    setImageType(res.data.cover.type)
+    //显示图片
+    setImageList(res.data.cover.images.map(url => {return { url }}))
+    }
+    
+    getArticleDetail()
+  }, [articleId, form])
 
 
   return (
@@ -70,6 +93,7 @@ const Publish = () => {
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 0 }}
           onFinish={onFinish}
+          form={form}
         >
           <Form.Item
             label="标题"
@@ -107,6 +131,7 @@ const Publish = () => {
           name='image'
           onChange={onChange}
           maxCount={imageType}
+          fileList={imageList}
         >
           <div style={{ marginTop: 8 }}>
             <PlusOutlined />
