@@ -6,7 +6,7 @@ import router from "@/router";
 //2、超时时间
 
 const request = axios.create({
-  baseURL: '/v1_0',
+  baseURL: "http://geek.itheima.net/v1_0",
   timeout: 5000
 })
 
